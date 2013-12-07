@@ -9,16 +9,19 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from decouple import config
-from dj_database_url import parse as db_url
+import dj_database_url
 from unipath import Path
 BASE_DIR = Path(__file__).parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = config('DEBUG', default=False, cast=bool)
-TEMPLATE_DEBUG = DEBUG
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'wo@vkp+iwt1ytda5%oqorojmzj2t-yzj2tihsmqrhtu)fhu+je'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -53,10 +56,8 @@ WSGI_APPLICATION = 'eventex.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': config(
-        'DATABASE_URL',
-        default='sqlite:///'+  BASE_DIR.child('db.sqlite3'),
-        cast=db_url),
+    'default': dj_database_url.config(
+        default='sqlite:///'+  BASE_DIR.child('db.sqlite3'))
 }
 
 # Internationalization
