@@ -1,15 +1,18 @@
-#coding: utf-8
+# coding: utf-8
 from django.test import TestCase
 from eventex.subscriptions.forms import SubscriptionForm
 from eventex.subscriptions.models import Subscription
+from django.core.urlresolvers import reverse as r
+
 
 class SubscribeTest(TestCase):
+
     def setUp(self):
-        self.resp = self.client.get('/inscricao/')
+        self.resp = self.client.get(r('subscriptions:subscribe'))
 
     def test_get(self):
         '---> Get /inscricao/ must return 200.'
-        self.assertEqual(200,self.resp.status_code)
+        self.assertEqual(200, self.resp.status_code)
 
     def test_template(self):
         '--->Response should be a rendered template.'
@@ -20,15 +23,15 @@ class SubscribeTest(TestCase):
 
     def test_html(self):
         '---> Html must contain input controls.'
-        self.assertContains(self.resp,'<form')
-        self.assertContains(self.resp,'<input',6)
-        self.assertContains(self.resp,'type="text"',3)
-        self.assertContains(self.resp,'type="email"')
-        self.assertContains(self.resp,'type="submit"')
+        self.assertContains(self.resp, '<form')
+        self.assertContains(self.resp, '<input', 6)
+        self.assertContains(self.resp, 'type="text"', 3)
+        self.assertContains(self.resp, 'type="email"')
+        self.assertContains(self.resp, 'type="submit"')
 
     def test_csrf(self):
         '---> Html must contain crsf token.'
-        self.assertContains(self.resp,'csrfmiddlewaretoken')
+        self.assertContains(self.resp, 'csrfmiddlewaretoken')
 
     def test_has_form(self):
         '---> Context must have subscription form.'
@@ -38,9 +41,11 @@ class SubscribeTest(TestCase):
     def test_form_has_fields(self):
         '---> Form must have 4 fields.'
         form = self.resp.context['form']
-        self.assertItemsEqual(['name','email','cpf','phone'],form.fields)
+        self.assertItemsEqual(['name', 'email', 'cpf', 'phone'], form.fields)
+
 
 class SubscribePostTest(TestCase):
+
     def setUp(self):
         data = dict(
             name='Henrique Bastos',
@@ -48,7 +53,7 @@ class SubscribePostTest(TestCase):
             email='henrique@bastos.net',
             phone='21-96186180'
         )
-        self.resp = self.client.post('/inscricao/', data)
+        self.resp = self.client.post(r('subscriptions:subscribe'), data)
 
     def test_post(self):
         'Valid POST should redirect to /inscricao/1/'
@@ -58,7 +63,9 @@ class SubscribePostTest(TestCase):
         'Valid POST must be saved.'
         self.assertTrue(Subscription.objects.exists())
 
+
 class SubscribeInvalidPostTest(TestCase):
+
     def setUp(self):
         data = dict(
             name='Henrique Bastos',
@@ -66,7 +73,7 @@ class SubscribeInvalidPostTest(TestCase):
             email='henrique@bastos.net',
             phone='21-96186180'
         )
-        self.resp = self.client.post('/inscricao/', data)
+        self.resp = self.client.post(r('subscriptions:subscribe'), data)
 
     def test_post(self):
         'Invalid POST should not redirect.'
