@@ -7,24 +7,18 @@ class SubscribeTest(TestCase):
         self.resp = self.client.get('/inscricao/')
 
     def test_get(self):
-        """
-        Get /inscricao/ must return 200.
-        """
+        '---> Get /inscricao/ must return 200.'
         self.assertEqual(200,self.resp.status_code)
 
     def test_template(self):
-        """
-        Response should be a rendered template.
-        """
+        '--->Response should be a rendered template.'
         self.assertTemplateUsed(
             self.resp,
             'subscriptions/subscription_form.html'
         )
 
     def test_html(self):
-        """
-        Html must contain input controls.
-        """
+        '---> Html must contain input controls.'
         self.assertContains(self.resp,'<form')
         self.assertContains(self.resp,'<input',6)
         self.assertContains(self.resp,'type="text"',3)
@@ -32,23 +26,15 @@ class SubscribeTest(TestCase):
         self.assertContains(self.resp,'type="submit"')
 
     def test_csrf(self):
-        """
-        Html must contain crsf token.
-        """
+        '---> Html must contain crsf token.'
         self.assertContains(self.resp,'csrfmiddlewaretoken')
 
     def test_has_form(self):
-        """
-        Context must have subscription form.
-        """
+        '---> Context must have subscription form.'
         form = self.resp.context['form']
         self.assertIsInstance(form, SubscriptionForm)
 
     def test_form_has_fields(self):
-        """
-        Form must have 4 fields.
-        """
+        '---> Form must have 4 fields.'
         form = self.resp.context['form']
         self.assertItemsEqual(['name','email','cpf','phone'],form.fields)
-
-
