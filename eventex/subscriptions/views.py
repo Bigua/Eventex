@@ -1,10 +1,31 @@
-#coding: utf-8
+# coding: utf-8
+from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
 from eventex.subscriptions.forms import SubscriptionForm
+from eventex.subscriptions.models import Subscription
+
 
 def subscribe(request):
-    return render(
-        request,
-        'subscriptions/subscription_form.html',
-        {'form':SubscriptionForm()}
-    )
+    if request.method == 'POST':
+        return create(request)
+    else:
+        return new(request)
+
+
+def new(request):
+    return render(request, 'subscriptions/subscription_form.html',
+                  {'form': SubscriptionForm()})
+
+
+def create(request):
+    form = SubscriptionForm(request.POST)
+    if not form.is_valid():
+        return render(request, 'subscriptions/subscription_form.html',
+                      {'form': form})
+    obj = form.save()
+    return HttpResponseRedirect('/inscricao/%d/' % obj.pk)
+
+
+def detail(request, pk):
+    return render(request, 'subscriptions/subscription_detail.html')

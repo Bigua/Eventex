@@ -3,14 +3,17 @@ from django.test import TestCase
 from django.db import IntegrityError
 from datetime import datetime
 from eventex.subscriptions.models import Subscription
+
+
 class SubscriptionTest(TestCase):
+
     def setUp(self):
         self.obj = Subscription(
             name='Henrique Bastos',
             cpf='12345678901',
             email='henrique@bastos.net',
             phone='21-96186180'
-    )
+        )
 
     def test_create(self):
         '---> Subscription must have name, cpf, email, phone'
@@ -25,7 +28,9 @@ class SubscriptionTest(TestCase):
     def test_unicode(self):
         self.assertEqual(u'Henrique Bastos', unicode(self.obj))
 
+
 class SubscriptionUniqueTest(TestCase):
+
     def setUp(self):
         # Create a first entry to force the collision
         Subscription.objects.create(
