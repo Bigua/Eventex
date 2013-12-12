@@ -22,3 +22,19 @@ class DetailTest(TestCase):
         'Uses template'
         self.assertTemplateUsed(self.resp,
                                 'subscriptions/subscription_detail.html')
+
+    def test_context(self):
+        'Context must have a subscription instance.'
+        subscription = self.resp.context['subscription']
+        self.assertIsInstance(subscription, Subscription)
+
+    def test_html(self):
+        'Check if subscription data was rendered.'
+        self.assertContains(self.resp, 'Henrique Bastos')
+
+
+class DetailNotFound(TestCase):
+
+    def test_not_found(self):
+        response = self.client.get('/inscricao/0/')
+        self.assertEqual(404, response.status_code)
