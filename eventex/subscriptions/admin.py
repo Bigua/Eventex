@@ -2,7 +2,7 @@
 from django.contrib import admin
 from eventex.subscriptions.models import Subscription
 from django.utils.datetime_safe import datetime
-from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext, ugettext as _
 # Register your models here.
 
 
@@ -22,6 +22,12 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     def mark_as_paid(self, request, queryset):
         count = queryset.update(paid=True)
+        msg = ungettext(
+            u'%d inscrição foi marcada como paga.',
+            u'%d inscrições foram marcadas como pagas.',
+            count
+        )
+        self.message_user(request, msg % count)
 
     mark_as_paid.short_description = _('Marcar como pago')
 
