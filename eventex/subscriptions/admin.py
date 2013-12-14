@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'cpf',
-                    'phone', 'created_at', 'subscribed_today','paid')
+                    'phone', 'created_at', 'subscribed_today', 'paid')
     date_hierarchy = 'created_at'
     search_fields = ('name', 'cpf', 'email', 'phone', 'created_at')
     list_filter = ['created_at']
@@ -18,5 +18,11 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     subscribed_today.short_description = _(u'Inscrito hoje?')
     subscribed_today.boolean = True
+    actions = ['mark_as_paid']
+
+    def mark_as_paid(self, request, queryset):
+        count = queryset.update(paid=True)
+
+    mark_as_paid.short_description = _('Marcar como pago')
 
 admin.site.register(Subscription, SubscriptionAdmin)
