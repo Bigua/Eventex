@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'south',
     'eventex.core',
     'eventex.subscriptions',
+    "eventex.myauth",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,3 +85,11 @@ SOUTH_TESTS_MIGRATE = False
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = BASE_DIR.child('staticfiles')
 STATIC_URL = '/static/'
+
+
+# AUTHENTICATION_BACKENDS = (
+#     'eventex.myauth.backends.EmailBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
+
+AUTH_USER_MODEL='myauth.User'
